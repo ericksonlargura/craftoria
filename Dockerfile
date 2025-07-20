@@ -3,10 +3,13 @@ FROM openjdk:21-jdk-slim
 WORKDIR /server
 
 # Install wget for serverstarter
-RUN apt-get update && apt-get install -y wget sudo
+RUN apt-get update && apt-get install -y wget unzip
 
-# Copy everything into container (from build context)
-COPY . .
+# Download server zip
+RUN wget https://github.com/ericksonlargura/craftoria/blob/main/server.zip
+
+# Inflate server zip
+RUN unzip server.zip
 
 # Make the script executable
 RUN chmod +x startserver.sh
@@ -17,5 +20,5 @@ RUN echo "eula=true" > eula.txt
 # Expose default Minecraft port
 EXPOSE 25565
 
-# Run startserver.sh at container runtime (not during build)
+# Run startserver.sh at container runtime
 CMD ["bash", "./startserver.sh"]
