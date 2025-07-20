@@ -6,7 +6,7 @@ WORKDIR /server
 RUN apt-get update && apt-get install -y wget unzip
 
 # Download server zip
-RUN wget https://github.com/ericksonlargura/craftoria/blob/main/server.zip
+RUN wget https://github.com/ericksonlargura/craftoria/raw/main/server.zip
 
 # Inflate server zip
 RUN unzip server.zip
