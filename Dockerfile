@@ -5,20 +5,14 @@ WORKDIR /server
 # Install wget for serverstarter
 RUN apt-get update && apt-get install -y wget unzip
 
-# Download server zip
-RUN wget https://github.com/ericksonlargura/craftoria/raw/main/server.zip
+# Copy entrypoint to avoid host overriding the entire folder
+COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 
-# Inflate server zip
-RUN unzip server.zip
-
-# Make the script executable
-RUN chmod +x startserver.sh
-
-# Accept EULA
-RUN echo "eula=true" > eula.txt
+# Make the entrypoint script executable
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
 # Expose default Minecraft port
 EXPOSE 25565
 
-# Run startserver.sh at container runtime
-CMD ["bash", "./startserver.sh"]
+# Entrypoint
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
