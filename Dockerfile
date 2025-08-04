@@ -2,18 +2,24 @@ FROM openjdk:21-jdk-slim
 
 WORKDIR /server
 
-# Install wget for serverstarter
-RUN apt-get update && apt-get install -y wget unzip dos2unix
+# Install wget for startserver.sh
+RUN apt-get update && \
+    apt-get install -y wget && \
+    rm -rf /var/lib/apt/lists/*
 
-# Copy entrypoint to avoid host overriding the entire folder
-COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+# Create a scripts directory that won't be overridden
+RUN mkdir -p /opt/minecraft
 
-# Fix line endings and make the entrypoint script executable
-RUN dos2unix /usr/local/bin/docker-entrypoint.sh && \
-    chmod +x /usr/local/bin/docker-entrypoint.sh
+# Copy scripts to a safe location
+COPY entrypoint.sh /opt/minecraft/entrypoint.sh
+COPY server-setup-config.yaml /opt/minecraft/server-setup-config.yaml
+COPY startserver.sh /opt/minecraft/startserver.sh
+
+# Make scripts executable
+RUN chmod +x /opt/minecraft/entrypoint.sh /opt/minecraft/startserver.sh
 
 # Expose default Minecraft port
 EXPOSE 25565
 
 # Entrypoint
-ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+ENTRYPOINT ["/opt/minecraft/entrypoint.sh"]
