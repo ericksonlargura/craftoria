@@ -4,7 +4,7 @@ WORKDIR /server
 
 # Install wget for startserver.sh
 RUN apt-get update && \
-    apt-get install -y wget && \
+    apt-get install -y wget procps && \
     rm -rf /var/lib/apt/lists/*
 
 # Create a scripts directory that won't be overridden
