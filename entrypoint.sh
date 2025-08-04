@@ -11,6 +11,12 @@ if [ ! -f "/server/startserver.sh" ]; then
     chmod +x /server/startserver.sh
 fi
 
+# Accept EULA
+if [ ! -f "/server/eula.txt" ] || ! grep -q "eula=true" /server/eula.txt; then
+    echo "Accepting Minecraft EULA..."
+    echo "eula=true" > /server/eula.txt
+fi
+
 # Function to handle shutdown
 shutdown_server() {
     echo "Received shutdown signal, stopping Minecraft server gracefully..."
